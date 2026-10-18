@@ -1,0 +1,46 @@
+name: Verificadores externos — Z3 y CBMC
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "obligations/**"
+      - "proofs/**"
+      - "upstream/**"
+      - ".github/workflows/formal-solvers.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  z3:
+    name: Obligaciones SMT-LIB con Z3
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+      - name: Instalar Z3
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes z3
+      - name: Ejecutar obligaciones SMT
+        run: sh obligations/run_z3.sh
+
+  cbmc:
+    name: Arneses C con CBMC
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+      - name: Instalar CBMC y GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cbmc gcc
+      - name: Ejecutar verificación acotada
+        shell: bash
+        run: |
+          set -o pipefail
+          bash obligations/run_cbmc.sh
