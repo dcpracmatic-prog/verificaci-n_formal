@@ -37,7 +37,7 @@ def _build_run(csrc_dir: str, workdir: str, cc: str = "gcc"):
     except (OSError, subprocess.TimeoutExpired) as exc:
         return -1, f"COMPILER ERROR ({type(exc).__name__}): {exc}"
     if b.returncode != 0:
-        return -1, "COMPILE ERROR:\\n" + b.stderr[-1500:]
+        return -1, "COMPILE ERROR:\n" + b.stderr[-1500:]
     env = dict(os.environ, ASAN_OPTIONS="detect_leaks=0")
     try:
         r = subprocess.run([exe], capture_output=True, text=True, env=env, timeout=120)
@@ -50,7 +50,7 @@ def run(verbose: bool = True):
     with tempfile.TemporaryDirectory() as tmp:
         code, out = _build_run(CSRC, tmp)
         proofs = []
-        fn_lines = re.findall(r"FN (\\w+) cases=(\\d+) fails=(\\d+) domain=(.*)", out)
+        fn_lines = re.findall(r"FN (\w+) cases=(\d+) fails=(\d+) domain=(.*)", out)
         for name, cases, fails, dom in fn_lines:
             ok = code == 0 and int(fails) == 0
             proofs.append({
