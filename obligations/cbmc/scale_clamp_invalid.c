@@ -17,7 +17,7 @@ int main(void) {
     double scale = nondet_double();
     double lo = nondet_double();
     double hi = nondet_double();
-    __CPROVER_assume((len < 1 || len > 1000000));
+    __CPROVER_assume((len < 1 || len > 1000000) || !(hi >= lo));
     double *in = malloc((1) * sizeof(double));
     __CPROVER_assume(in != NULL);
     double *out = malloc((1) * sizeof(double));

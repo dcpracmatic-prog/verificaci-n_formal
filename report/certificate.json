@@ -1,14 +1,14 @@
 {
-  "generated_utc": "2026-10-18T18:44:07Z",
-  "python": "3.13.16",
+  "generated_utc": "2026-10-18T23:35:22Z",
+  "python": "3.12.3",
   "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
   "files_sha256": {
-    "upstream/commonweave_zero/c_src/matmul.c": "ff264a4925fb50e9888650f3d9f4524f1ef757b0497b0c0f76f2cc3710eb74e5",
+    "upstream/commonweave_zero/c_src/matmul.c": "2bd07e9882e4a0f8ca1c4ba9c9aa23a68f20a10f165b0d544c5e76f985524860",
     "upstream/commonweave_zero/c_src/stats.c": "5f4cffd2ddf9419af40e84f8e9919dd03ffeb127175663baad5e94dd45871112",
     "upstream/commonweave_zero/c_src/stats.h": "44e37d59e37e5aa1058f8f321ff9c9813573b3ccbfca35b21407cb7ec55099e6",
-    "upstream/commonweave_zero/contracts/matmul.yaml": "aaf292baaed536c08e3b97aaec00981b9348ab3470e51f35cb36b72e105001c5",
+    "upstream/commonweave_zero/contracts/matmul.yaml": "a67a611610497558a13ef49c8583f6178c7b42053e1eee220ad8eef6fd75dbbf",
     "upstream/commonweave_zero/contracts/stats.yaml": "6e756dca5450343d7d135c604ceb44f2e94199f4d6e804e1d153264c4baee0e3",
-    "proofs/c_exhaustive/harness.c": "f9d0ef46c0bfecc441455831a20ebcd73b03fdd8ce65e7f2492e00fd7be26061",
+    "proofs/c_exhaustive/harness.c": "aefc1cd471bc98b54e1e69e68d83dfe8198a72ddb9c2c37ce12352794a7e3b62",
     "proofs/lemmas.py": "5aa97753d908654442580984002d53ef05909aa900480241f03a6feefd3a35bc",
     "fvcore/exhaustive.py": "28352e0a2f058a33edb98fb562c6bac12135758cd544f84facac6f97ad26778c",
     "fvcore/intervals.py": "975ea372de7edfb011b3b2cbff7c7eb0852b121a02034ad4e7954d384915357b"

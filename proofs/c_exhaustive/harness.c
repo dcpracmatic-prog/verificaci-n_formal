@@ -82,15 +82,16 @@ static void t_scale_clamp(void) {
             for (int s = 0; s < 3; s++) for (int l = 0; l < 3; l++) for (int h = 0; h < 3; h++) {
                 for (size_t i = 0; i < len; i++) out[i] = SENT;
                 int rc = scale_clamp(in, out, len, sv[s], lv[l], lv[h]); cases++;
+                if (lv[l] > lv[h]) {                 /* contrato: requires hi >= lo -> CW_ERR_DIM y out intacto */
+                    CHECK(rc == CW_ERR_DIM, "scale_clamp lo>hi rc=%d", rc);
+                    for (size_t i = 0; i < len; i++) CHECK(out[i] == SENT, "scale_clamp tocó out con lo>hi");
+                    continue;
+                }
                 CHECK(rc == CW_OK, "scale_clamp rc=%d", rc);
                 for (size_t i = 0; i < len; i++) {
                     double v = in[i] * sv[s];
-                    if (lv[l] <= lv[h]) {            /* contrato bien formado: out = clamp(v,lo,hi) */
-                        double e = v < lv[l] ? lv[l] : (v > lv[h] ? lv[h] : v);
-                        CHECK(out[i] == e && out[i] >= lv[l] && out[i] <= lv[h], "scale_clamp valor");
-                    } else {                         /* lo>hi: el contrato NO lo excluye; se fija el comportamiento observado (=hi) */
-                        CHECK(out[i] == lv[h], "scale_clamp lo>hi esperaba hi");
-                    }
+                    double e = v < lv[l] ? lv[l] : (v > lv[h] ? lv[h] : v);
+                    CHECK(out[i] == e && out[i] >= lv[l] && out[i] <= lv[h], "scale_clamp valor");
                 }
             }
         }

@@ -39,7 +39,7 @@ sh obligations/run_z3.sh                # SI tienes Z3    (pendiente, ver abajo)
 - No hay prueba mecanizada en Coq/Lean/Isabelle/Dafny/Frama-C (la ruta hacia "provably correct" real; ver roadmap en el documento de límites).
 
 ## Hallazgo sobre tu código
-`scale_clamp` con `lo > hi` **no está excluido por el contrato** y devuelve `hi` (el orden de los `if`). El arnés fija ese comportamiento, pero el contrato debería declarar `requires: lo <= hi` o definir el resultado.
+`scale_clamp` aceptaba `lo > hi` pese a que el contrato declara `requires: hi >= lo` (código 2). Corregido: ahora devuelve `CW_ERR_DIM` (también con NaN) sin tocar `out`, y el arnés exhaustivo y los arneses CBMC lo verifican.
 
 ## Estructura
 ```

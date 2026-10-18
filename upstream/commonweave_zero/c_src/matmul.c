@@ -58,6 +58,8 @@ int scale_clamp(const double *in, double *out, size_t len,
         return CW_ERR_DIM;
     if (len > 1000000)
         return CW_ERR_OVERFLOW;
+    if (!(hi >= lo))            /* contrato: requires hi >= lo (code 2); también rechaza NaN */
+        return CW_ERR_DIM;
     if (((uintptr_t)in | (uintptr_t)out) & 7u)
         return CW_ERR_ALIGN;
     for (size_t i = 0; i < len; ++i) {

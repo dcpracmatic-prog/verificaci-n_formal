@@ -18,6 +18,7 @@ int main(void) {
     double lo = nondet_double();
     double hi = nondet_double();
     __CPROVER_assume(len >= 1 && len <= 3);
+    __CPROVER_assume(hi >= lo);    /* requires del contrato */
     double *in = malloc((len) * sizeof(double));
     __CPROVER_assume(in != NULL);
     double *out = malloc((len) * sizeof(double));
