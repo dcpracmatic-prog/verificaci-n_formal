@@ -16,7 +16,7 @@ int harness_main(void);
 int main(void) {
     srand(12345); int ran = 0, assumed_out = 0;
     for (int i = 0; i < 4000; i++) { if (setjmp(fv_jb) == 0) { harness_main(); ran++; } else assumed_out++; }
-    printf("ejecuciones=%d descartadas_por_assume=%d\\n", ran, assumed_out);
+    printf("ejecuciones=%d descartadas_por_assume=%d\n", ran, assumed_out);
     return ran > 0 ? 0 : 3;
 }
 '''
@@ -58,6 +58,6 @@ def run():
 if __name__ == "__main__":
     allok = True
     for n, ok, msg in run():
-        print(("OK   " if ok else "FALLA"), n, "|", msg.replace("\\n", " "))
+        print(("OK   " if ok else "FALLA"), n, "|", msg.replace("\n", " "))
         allok &= ok
     sys.exit(0 if allok else 1)
