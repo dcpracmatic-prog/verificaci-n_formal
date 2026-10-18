@@ -1,0 +1,304 @@
+{
+  "generated_utc": "2026-10-18T18:44:07Z",
+  "python": "3.13.16",
+  "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+  "files_sha256": {
+    "upstream/commonweave_zero/c_src/matmul.c": "ff264a4925fb50e9888650f3d9f4524f1ef757b0497b0c0f76f2cc3710eb74e5",
+    "upstream/commonweave_zero/c_src/stats.c": "5f4cffd2ddf9419af40e84f8e9919dd03ffeb127175663baad5e94dd45871112",
+    "upstream/commonweave_zero/c_src/stats.h": "44e37d59e37e5aa1058f8f321ff9c9813573b3ccbfca35b21407cb7ec55099e6",
+    "upstream/commonweave_zero/contracts/matmul.yaml": "aaf292baaed536c08e3b97aaec00981b9348ab3470e51f35cb36b72e105001c5",
+    "upstream/commonweave_zero/contracts/stats.yaml": "6e756dca5450343d7d135c604ceb44f2e94199f4d6e804e1d153264c4baee0e3",
+    "proofs/c_exhaustive/harness.c": "f9d0ef46c0bfecc441455831a20ebcd73b03fdd8ce65e7f2492e00fd7be26061",
+    "proofs/lemmas.py": "5aa97753d908654442580984002d53ef05909aa900480241f03a6feefd3a35bc",
+    "fvcore/exhaustive.py": "28352e0a2f058a33edb98fb562c6bac12135758cd544f84facac6f97ad26778c",
+    "fvcore/intervals.py": "975ea372de7edfb011b3b2cbff7c7eb0852b121a02034ad4e7954d384915357b"
+  },
+  "proofs": [
+    {
+      "name": "L1/matmul: A[i*k+p] en rango",
+      "kind": "ALGEBRAIC+INTERVAL",
+      "status": "PROVEN",
+      "statement": "∀ rows∈[1,10000], cols∈[1,10000], 0≤r<rows, 0≤c<cols: 0 ≤ i*k+p < rows·cols, y i*k+p y rows·cols caben en size_t (máx 99999999).",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "L2/matmul: B[p*n+j] en rango",
+      "kind": "ALGEBRAIC+INTERVAL",
+      "status": "PROVEN",
+      "statement": "∀ rows∈[1,10000], cols∈[1,10000], 0≤r<rows, 0≤c<cols: 0 ≤ p*n+j < rows·cols, y p*n+j y rows·cols caben en size_t (máx 99999999).",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "L3/matmul: C[i*n+j] en rango",
+      "kind": "ALGEBRAIC+INTERVAL",
+      "status": "PROVEN",
+      "statement": "∀ rows∈[1,10000], cols∈[1,10000], 0≤r<rows, 0≤c<cols: 0 ≤ i*n+j < rows·cols, y i*n+j y rows·cols caben en size_t (máx 99999999).",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "L4/histogram: (int64)hi-lo y (int64)v-lo caben en int64",
+      "kind": "INTERVAL",
+      "status": "PROVEN",
+      "statement": "hi,lo∈int32: hi-lo∈[-4294967295,4294967295] ⊂ int64.",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "L5/histogram: (v-lo)*nbins cabe en int64",
+      "kind": "INTERVAL",
+      "status": "PROVEN",
+      "statement": "(v-lo)∈[0,4294967295], nbins∈[1,4096]: producto ≤ 17592186040320 < 2^63.",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "L6/histogram: 0 <= bin < nbins",
+      "kind": "ALGEBRAIC",
+      "status": "PROVEN",
+      "statement": "∀ w≥1, nbins≥1, 0≤x≤w-1: x·nbins ≤ (w-1)·nbins = w·nbins − nbins < w·nbins ⇒ ⌊x·nbins/w⌋ < nbins, y ≥ 0 por x≥0. Paso final (def. de ⌊·⌋: q·w ≤ x·nbins < nbins·w ⇒ q < nbins) es una línea a mano; cordura exhaustiva con w<256, nbins≤16 incluida.",
+      "cases": 4080,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones; paso de definición de ⌊·⌋ demostrado a mano"
+    },
+    {
+      "name": "L7/histogram: contador uint32 no desborda",
+      "kind": "INTERVAL",
+      "status": "PROVEN",
+      "statement": "cada bin recibe ≤ len ≤ 1 000 000 incrementos < 2^32.",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "L8/array_stats: acumulador int64 no desborda",
+      "kind": "INTERVAL",
+      "status": "PROVEN",
+      "statement": "|suma| ≤ len·2^31 ≤ 2147483647000000 < 2^63 para len ≤ 1 000 000.",
+      "cases": 0,
+      "counterexample": null,
+      "trusted": "fvcore/intervals.py y la traducción manual C→Python de las expresiones"
+    },
+    {
+      "name": "C/matmul: exhaustivo + ASan/UBSan",
+      "kind": "EXHAUSTIVE_C_ASAN",
+      "status": "PROVEN",
+      "statement": "Para TODA entrada de [m,k,n in 1..3; entradas en {-1,2}; + 13 caminos de error]: código de retorno correcto, resultado = oráculo independiente, salida intacta en error, sin UB/OOB detectable.",
+      "cases": 348321,
+      "counterexample": null,
+      "trusted": "gcc, ASan/UBSan, libc, oráculo escrito en el arnés"
+    },
+    {
+      "name": "C/scale_clamp: exhaustivo + ASan/UBSan",
+      "kind": "EXHAUSTIVE_C_ASAN",
+      "status": "PROVEN",
+      "statement": "Para TODA entrada de [len 1..3; in {-2,0,1,3}; scale,lo,hi en {-1,0,2} (incluye lo>hi); + 6 errores]: código de retorno correcto, resultado = oráculo independiente, salida intacta en error, sin UB/OOB detectable.",
+      "cases": 2274,
+      "counterexample": null,
+      "trusted": "gcc, ASan/UBSan, libc, oráculo escrito en el arnés"
+    },
+    {
+      "name": "C/array_stats: exhaustivo + ASan/UBSan",
+      "kind": "EXHAUSTIVE_C_ASAN",
+      "status": "PROVEN",
+      "statement": "Para TODA entrada de [len 1..4; valores {-2,0,3} y {INT32_MIN,0,INT32_MAX}; + 6 errores]: código de retorno correcto, resultado = oráculo independiente, salida intacta en error, sin UB/OOB detectable.",
+      "cases": 246,
+      "counterexample": null,
+      "trusted": "gcc, ASan/UBSan, libc, oráculo escrito en el arnés"
+    },
+    {
+      "name": "C/histogram: exhaustivo + ASan/UBSan",
+      "kind": "EXHAUSTIVE_C_ASAN",
+      "status": "PROVEN",
+      "statement": "Para TODA entrada de [len 1..3; datos y lo,hi en -3..3; nbins 1..4; + extremos int32 con nbins hasta 4096; + 9 errores]: código de retorno correcto, resultado = oráculo independiente, salida intacta en error, sin UB/OOB detectable.",
+      "cases": 78273,
+      "counterexample": null,
+      "trusted": "gcc, ASan/UBSan, libc, oráculo escrito en el arnés"
+    },
+    {
+      "name": "mean(ints) == media exacta",
+      "kind": "EXHAUSTIVE",
+      "status": "PROVEN",
+      "statement": "∀ xs∈[[-2]..[2, 2, 2, 2]] (780 valores): se cumple «mean(ints) == media exacta»",
+      "cases": 780,
+      "counterexample": null,
+      "trusted": "intérprete de Python y que la propiedad exprese la intención"
+    },
+    {
+      "name": "mean(floats) == media exacta",
+      "kind": "EXHAUSTIVE",
+      "status": "PROVEN",
+      "statement": "∀ xs∈[[-1.5]..[2.0, 2.0, 2.0]] (84 valores): se cumple «mean(floats) == media exacta»",
+      "cases": 84,
+      "counterexample": null,
+      "trusted": "intérprete de Python y que la propiedad exprese la intención"
+    },
+    {
+      "name": "min <= mean <= max",
+      "kind": "EXHAUSTIVE",
+      "status": "PROVEN",
+      "statement": "∀ xs∈[[-2]..[2, 2, 2, 2]] (780 valores): se cumple «min <= mean <= max»",
+      "cases": 780,
+      "counterexample": null,
+      "trusted": "intérprete de Python y que la propiedad exprese la intención"
+    },
+    {
+      "name": "mean invariante al orden",
+      "kind": "EXHAUSTIVE",
+      "status": "PROVEN",
+      "statement": "∀ xs∈[[-2]..[2, 2, 2, 2]] (780 valores): se cumple «mean invariante al orden»",
+      "cases": 780,
+      "counterexample": null,
+      "trusted": "intérprete de Python y que la propiedad exprese la intención"
+    },
+    {
+      "name": "mean([]) is None",
+      "kind": "EXHAUSTIVE",
+      "status": "PROVEN",
+      "statement": "∀ xs∈{[]}: se cumple «mean([]) is None»",
+      "cases": 1,
+      "counterexample": null,
+      "trusted": "intérprete de Python y que la propiedad exprese la intención"
+    }
+  ],
+  "summary": {
+    "proven": 17,
+    "refuted": 0
+  },
+  "unrun_obligations": [
+    "obligations/cbmc/*.c (CBMC no ejecutado: 8 arneses compilan y pasan humo con gcc)",
+    "obligations/smt2/*.smt2 (Z3 no ejecutado: 5 obligaciones)"
+  ],
+  "not_proven": [
+    "Corrección total del programa respecto a una especificación formal completa (aquí las especificaciones son propiedades parciales).",
+    "Comportamiento de punto flotante más allá de lo comprobado (error de redondeo, NaN, inf no modelados salvo donde se indica).",
+    "Ausencia de errores en el compilador, el enlazador, libc, el SO o el hardware (base de confianza no verificada).",
+    "Entradas fuera de los dominios finitos declarados en cada prueba EXHAUSTIVE.",
+    "Concurrencia: ningún componente analizado es concurrente."
+  ],
+  "mutation_check": {
+    "total": 14,
+    "killed": 14,
+    "survived": [],
+    "detail": [
+      {
+        "mutant": "matmul: bucle p<=k (lectura fuera de rango)",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "matmul: índice A[i*n+p] (valor incorrecto)",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "matmul: sin chequeo de alineación",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "matmul: límite 10000 -> 10001",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "scale_clamp: sin cota superior",
+        "killed": true,
+        "how": "fallo de aserción"
+      },
+      {
+        "mutant": "scale_clamp: sin cota inferior",
+        "killed": true,
+        "how": "fallo de aserción"
+      },
+      {
+        "mutant": "array_stats: suma en int32 (overflow)",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "array_stats: varianza muestral (len-1)",
+        "killed": true,
+        "how": "fallo de aserción"
+      },
+      {
+        "mutant": "array_stats: min mal calculado",
+        "killed": true,
+        "how": "fallo de aserción"
+      },
+      {
+        "mutant": "histogram: incluye hi (v > hi) -> bin fuera de rango",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "histogram: resta en int32 (overflow UB)",
+        "killed": true,
+        "how": "sanitizer"
+      },
+      {
+        "mutant": "histogram: bins += 2",
+        "killed": true,
+        "how": "fallo de aserción"
+      },
+      {
+        "mutant": "histogram: no pone bins a cero",
+        "killed": true,
+        "how": "fallo de aserción"
+      },
+      {
+        "mutant": "histogram: límite nbins 4096 -> 4097",
+        "killed": true,
+        "how": "sanitizer"
+      }
+    ]
+  },
+  "autoheal_demo": {
+    "parche_incorrecto_rechazado": true,
+    "contraejemplo": [
+      "REFUTADA «mean(ints) == media exacta» tras 7 casos; contraejemplo: {'xs': [-2, -1]}"
+    ],
+    "parche_correcto_aceptado": true
+  },
+  "smoke_cbmc": [
+    {
+      "file": "array_stats_invalid.c",
+      "ok": true
+    },
+    {
+      "file": "array_stats_valid.c",
+      "ok": true
+    },
+    {
+      "file": "histogram_invalid.c",
+      "ok": true
+    },
+    {
+      "file": "histogram_valid.c",
+      "ok": true
+    },
+    {
+      "file": "matmul_invalid.c",
+      "ok": true
+    },
+    {
+      "file": "matmul_valid.c",
+      "ok": true
+    },
+    {
+      "file": "scale_clamp_invalid.c",
+      "ok": true
+    },
+    {
+      "file": "scale_clamp_valid.c",
+      "ok": true
+    }
+  ]
+}

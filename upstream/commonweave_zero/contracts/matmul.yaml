@@ -1,0 +1,42 @@
+# COMMONWEAVE Zero — contract for matmul (compact style, same as stats.yaml so LOC is comparable).
+# Documentation-only (not consumed by the generator): C = A*B within float64 precision on success;
+# on error the output buffer is left unmodified.
+name: matmul
+version: "0.1.0"
+language: c
+library: libmatmul.so
+abi: c99
+value_range_code: 5
+
+functions:
+  - name: matmul
+    description: Dense double-precision matrix multiplication C = A * B (row-major)
+    returns:
+      type: int
+      meaning: error_code
+      values: {0: OK, 1: NULL_POINTER, 2: INVALID_DIMENSION, 3: OVERFLOW, 4: ALIGNMENT}
+    memory: {copy: none_required}
+    parameters:
+      - {name: A, type: pointer, element: float64, direction: in,  shape: [m, k]}
+      - {name: B, type: pointer, element: float64, direction: in,  shape: [k, n]}
+      - {name: C, type: pointer, element: float64, direction: out, shape: [m, n]}
+      - {name: m, type: size_t, constraints: [1, 10000], violation_codes: {below: 2, above: 3}}
+      - {name: k, type: size_t, constraints: [1, 10000], violation_codes: {below: 2, above: 3}}
+      - {name: n, type: size_t, constraints: [1, 10000], violation_codes: {below: 2, above: 3}}
+  - name: scale_clamp
+    description: Element-wise scale and clamp
+    returns:
+      type: int
+      meaning: error_code
+      values: {0: OK, 1: NULL_POINTER, 2: INVALID_DIMENSION, 3: OVERFLOW, 4: ALIGNMENT}
+    memory: {copy: none_required}
+    requires:
+      - {expr: "hi >= lo", code: 2} 
+    parameters:
+      - {name: in,    type: pointer, element: float64, direction: in,  shape: [len]}
+      - {name: out,   type: pointer, element: float64, direction: out, shape: [len]}
+      - {name: len,   type: size_t, constraints: [1, 1000000], violation_codes: {below: 2, above: 3}}
+      - {name: scale, type: float64}
+      - {name: lo,    type: float64}
+      - {name: hi,    type: float64}
+
