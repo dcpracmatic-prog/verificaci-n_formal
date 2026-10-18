@@ -32,11 +32,17 @@ def _build_run(csrc_dir: str, workdir: str, cc: str = "gcc"):
     cmd = [cc, "-O1", "-g", "-std=gnu11", "-fsanitize=address,undefined", "-fno-sanitize-recover=all",
            f"-I{csrc_dir}", f'-DMATMUL_C="{csrc_dir}/matmul.c"', f'-DSTATS_C="{csrc_dir}/stats.c"',
            HARNESS, "-o", exe, "-lm"]
-    b = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        b = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return -1, f"COMPILER ERROR ({type(exc).__name__}): {exc}"
     if b.returncode != 0:
-        return -1, "COMPILE ERROR:\n" + b.stderr[-1500:]
+        return -1, "COMPILE ERROR:\\n" + b.stderr[-1500:]
     env = dict(os.environ, ASAN_OPTIONS="detect_leaks=0")
-    r = subprocess.run([exe], capture_output=True, text=True, env=env, timeout=120)
+    try:
+        r = subprocess.run([exe], capture_output=True, text=True, env=env, timeout=120)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return -1, f"EXECUTION ERROR ({type(exc).__name__}): {exc}"
     return r.returncode, r.stdout + r.stderr
 
 
@@ -44,7 +50,7 @@ def run(verbose: bool = True):
     with tempfile.TemporaryDirectory() as tmp:
         code, out = _build_run(CSRC, tmp)
         proofs = []
-        fn_lines = re.findall(r"FN (\w+) cases=(\d+) fails=(\d+) domain=(.*)", out)
+        fn_lines = re.findall(r"FN (\\w+) cases=(\\d+) fails=(\\d+) domain=(.*)", out)
         for name, cases, fails, dom in fn_lines:
             ok = code == 0 and int(fails) == 0
             proofs.append({
@@ -60,18 +66,23 @@ def run(verbose: bool = True):
                            "counterexample": {"salida": out[-800:]}, "trusted": ""})
         killed, survived, mut = 0, [], []
         for desc, fname, old, new in MUTANTS:
-            d = os.path.join(tmp, "m"); shutil.rmtree(d, ignore_errors=True); shutil.copytree(CSRC, d)
-            p = os.path.join(d, fname); s = open(p).read()
+            d = os.path.join(tmp, "m")
+            shutil.rmtree(d, ignore_errors=True)
+            shutil.copytree(CSRC, d)
+            p = os.path.join(d, fname)
+            with open(p, encoding="utf-8") as source_file:
+                s = source_file.read()
             if s.count(old) != 1:
                 raise RuntimeError(f"mutante mal definido ({desc}): {s.count(old)} apariciones de {old!r}")
-            open(p, "w").write(s.replace(old, new))
+            with open(p, "w", encoding="utf-8") as target_file:
+                target_file.write(s.replace(old, new))
             c2, o2 = _build_run(d, tmp)
             dead = c2 != 0
             killed += dead
             if not dead:
                 survived.append(desc)
             how = "no compila" if c2 == -1 else ("sanitizer" if "ERROR: AddressSanitizer" in o2 or "runtime error" in o2
-                                                else ("fallo de aserción" if dead else "SOBREVIVIÓ"))
+                                                  else ("fallo de aserción" if dead else "SOBREVIVIÓ"))
             mut.append((desc, dead, how))
         if verbose:
             for desc, dead, how in mut:
