@@ -1,12 +1,5 @@
-# verificacion-formal — hacia software demostrablemente correcto
-
-Capa de verificación construida sobre tus cuatro paquetes. Responde a la pregunta:
-**¿qué se puede demostrar hoy, con qué garantía exacta, y qué falta para "0 errores bajo cualquier escenario"?**
-
-> Lectura obligada antes de citar resultados: [`docs/ALCANCE_Y_LIMITES.md`](docs/ALCANCE_Y_LIMITES.md).
-> Ningún software real es "100 % libre de errores" en términos absolutos; lo que existe es *corrección
-> demostrada respecto a una especificación, bajo supuestos explícitos*. Este paquete hace explícitos ambos.
-
+[![Dependency Graph](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/dependabot/update-graph/badge.svg)](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/dependabot/update-graph)
+[![CI — pruebas y regresión](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/ci.yml/badge.svg)](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/ci.yml)
 ## Qué usa de tus archivos
 | Tu paquete | Uso aquí |
 |---|---|
@@ -38,9 +31,6 @@ sh obligations/run_z3.sh                # SI tienes Z3    (pendiente, ver abajo)
 - Punto flotante (error de redondeo de `matmul`, NaN/inf) no está demostrado.
 - No hay prueba mecanizada en Coq/Lean/Isabelle/Dafny/Frama-C (la ruta hacia "provably correct" real; ver roadmap en el documento de límites).
 
-## Hallazgo sobre tu código
-`scale_clamp` aceptaba `lo > hi` pese a que el contrato declara `requires: hi >= lo` (código 2). Corregido: ahora devuelve `CW_ERR_DIM` (también con NaN) sin tocar `out`, y el arnés exhaustivo y los arneses CBMC lo verifican.
-
 ## Estructura
 ```
 fvcore/        exhaustive.py (forall sobre dominio finito), intervals.py (intervalos + identidades), certificate.py
@@ -51,3 +41,11 @@ examples/      demo_autoheal_formal.py
 upstream/      copias sin modificar de c_src, contracts y autoheal
 report/        certificate.json, RESUMEN.md (generados)
 ```
+# verificacion-formal — hacia software demostrablemente correcto
+
+Capa de verificación construida sobre tus cuatro paquetes. Responde a la pregunta:
+**¿qué se puede demostrar hoy, con qué garantía exacta, y qué falta para "0 errores bajo cualquier escenario"?**
+
+> Lectura obligada antes de citar resultados: [`docs/ALCANCE_Y_LIMITES.md`](docs/ALCANCE_Y_LIMITES.md).
+> Ningún software real es "100 % libre de errores" en términos absolutos; lo que existe es *corrección
+> demostrada respecto a una especificación, bajo supuestos explícitos*. Este paquete hace explícitos ambos.
