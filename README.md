@@ -1,12 +1,5 @@
 [![Dependency Graph](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/dependabot/update-graph/badge.svg)](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/dependabot/update-graph)
 [![CI — pruebas y regresión](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/ci.yml/badge.svg)](https://github.com/dcpracmatic-prog/verificacion_formal/actions/workflows/ci.yml)
-## Qué usa de tus archivos
-| Tu paquete | Uso aquí |
-|---|---|
-| `commonweave_zero_v0.3` | **Objeto verificado**: el C real (`matmul`, `scale_clamp`, `array_stats`, `histogram`) y sus contratos YAML (de ahí salen las obligaciones CBMC/SMT). |
-| `autoheal-primitiva` | **Punto de integración**: su interfaz `verify` quedaba "lista para Dafny/Z3/CBMC"; aquí se llena con `FormalVerifier`. |
-| `lazo-primitiva` | Solo el *patrón* HMAC de `security.py` para firmar el certificado (no se importa código). |
-| `modelo_multi_sistema_v03_1` | No aplica (simulación causal sintética, sin código que verificar). |
 
 ## Ejecutar (solo Python ≥ 3.10 + gcc; sin dependencias externas para correr)
 ```bash
@@ -25,11 +18,6 @@ sh obligations/run_z3.sh                # SI tienes Z3    (pendiente, ver abajo)
 | **Exhaustivo sobre el C real + ASan/UBSan** | Código de retorno, resultado vs. oráculo independiente, salida intacta en error, sin UB/OOB | **Todas** las entradas de dominios pequeños declarados (p. ej. matmul ≤ 3×3×3, 348 321 casos) |
 | **Mutación** | 14 versiones deliberadamente rotas del C: el arnés detectó 14/14 | Demuestra que el verificador *puede* fallar |
 | **autoheal + FormalVerifier** | Un parche que pasa las pruebas aleatorias de autoheal (`mean([0,1]) == 0`) es rechazado con contraejemplo | Dominio declarado (780 listas de enteros + 84 de floats) |
-
-## Qué NO está hecho (honesto)
-- **CBMC y Z3 no se ejecutaron**: la sesión no tenía acceso a PyPI/apt. Se generaron 8 arneses CBMC y 5 obligaciones SMT-LIB2; los arneses compilan y pasan una prueba de humo con gcc (muestreo, *no* verificación). Hasta que corras `run_cbmc.sh`/`run_z3.sh`, esas garantías **no existen**.
-- Punto flotante (error de redondeo de `matmul`, NaN/inf) no está demostrado.
-- No hay prueba mecanizada en Coq/Lean/Isabelle/Dafny/Frama-C (la ruta hacia "provably correct" real; ver roadmap en el documento de límites).
 
 ## Estructura
 ```
