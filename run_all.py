@@ -26,8 +26,8 @@ files = [os.path.join(ROOT, f) for f in (
     "upstream/commonweave_zero/contracts/matmul.yaml", "upstream/commonweave_zero/contracts/stats.yaml",
     "proofs/c_exhaustive/harness.c", "proofs/lemmas.py", "fvcore/exhaustive.py", "fvcore/intervals.py")]
 files = [os.path.relpath(f) for f in files]
-unrun = [f"obligations/cbmc/*.c (CBMC no ejecutado: {len(smoke)} arneses compilan y pasan humo con gcc)",
-         "obligations/smt2/*.smt2 (Z3 no ejecutado: 5 obligaciones)"]
+unrun = [f"obligations/cbmc/*.c (run_all.py no ejecuta CBMC: {len(smoke)} arneses compilan y pasan humo con gcc; CBMC se corre con obligations/run_cbmc.sh y en el workflow formal-solvers)",
+         "obligations/smt2/*.smt2 (run_all.py no ejecuta Z3: 5 obligaciones; se corren con obligations/run_z3.sh y en el workflow formal-solvers)"]
 cert = certificate.build(L + C + acc.proofs, files, unrun, key=os.environ.get("FV_KEY", "").encode() or None)
 cert["mutation_check"] = mut
 cert["autoheal_demo"] = {"parche_incorrecto_rechazado": not rej.ok, "contraejemplo": rej.failures[:1], "parche_correcto_aceptado": acc.ok}
@@ -41,7 +41,7 @@ lines = ["# Resumen de verificación", "", f"Pruebas PROVEN: **{cert['summary'][
          "| Prueba | Tipo | Estado | Casos | Enunciado |", "|---|---|---|---|---|"]
 for p in cert["proofs"]:
     lines.append(f"| {p['name']} | {p['kind']} | {p['status']} | {p['cases']} | {p['statement'][:140].replace('|','/')} |")
-lines += ["", "## No ejecutado en esta sesión", *[f"- {u}" for u in unrun], "", "## NO probado", *[f"- {n}" for n in cert["not_proven"]]]
+lines += ["", "## No ejecutado por run_all.py", *[f"- {u}" for u in unrun], "", "## NO probado", *[f"- {n}" for n in cert["not_proven"]]]
 open(os.path.join(ROOT, "report", "RESUMEN.md"), "w").write("\n".join(lines) + "\n")
 print("\nRESULTADO:", "TODO OK" if ok else "HAY FALLOS", "| proven", cert["summary"]["proven"], "refuted", cert["summary"]["refuted"])
 sys.exit(0 if ok else 1)

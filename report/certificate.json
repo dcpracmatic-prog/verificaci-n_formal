@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-18T23:35:22Z",
+  "generated_utc": "2026-10-18T23:56:14Z",
   "python": "3.12.3",
   "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
   "files_sha256": {
@@ -173,8 +173,8 @@
     "refuted": 0
   },
   "unrun_obligations": [
-    "obligations/cbmc/*.c (CBMC no ejecutado: 8 arneses compilan y pasan humo con gcc)",
-    "obligations/smt2/*.smt2 (Z3 no ejecutado: 5 obligaciones)"
+    "obligations/cbmc/*.c (run_all.py no ejecuta CBMC: 8 arneses compilan y pasan humo con gcc; CBMC se corre con obligations/run_cbmc.sh y en el workflow formal-solvers)",
+    "obligations/smt2/*.smt2 (run_all.py no ejecuta Z3: 5 obligaciones; se corren con obligations/run_z3.sh y en el workflow formal-solvers)"
   ],
   "not_proven": [
     "Corrección total del programa respecto a una especificación formal completa (aquí las especificaciones son propiedades parciales).",

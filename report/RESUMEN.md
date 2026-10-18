@@ -23,9 +23,9 @@ Mutantes detectados: **14/14**
 | mean invariante al orden | EXHAUSTIVE | PROVEN | 780 | ∀ xs∈[[-2]..[2, 2, 2, 2]] (780 valores): se cumple «mean invariante al orden» |
 | mean([]) is None | EXHAUSTIVE | PROVEN | 1 | ∀ xs∈{[]}: se cumple «mean([]) is None» |
 
-## No ejecutado en esta sesión
-- obligations/cbmc/*.c (CBMC no ejecutado: 8 arneses compilan y pasan humo con gcc)
-- obligations/smt2/*.smt2 (Z3 no ejecutado: 5 obligaciones)
+## No ejecutado por run_all.py
+- obligations/cbmc/*.c (run_all.py no ejecuta CBMC: 8 arneses compilan y pasan humo con gcc; CBMC se corre con obligations/run_cbmc.sh y en el workflow formal-solvers)
+- obligations/smt2/*.smt2 (run_all.py no ejecuta Z3: 5 obligaciones; se corren con obligations/run_z3.sh y en el workflow formal-solvers)
 
 ## NO probado
 - Corrección total del programa respecto a una especificación formal completa (aquí las especificaciones son propiedades parciales).
