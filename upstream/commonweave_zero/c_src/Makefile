@@ -2,15 +2,15 @@ CC = gcc
 CFLAGS = -O2 -fPIC -std=c99 -Wall -Wextra
 LDFLAGS = -shared
 
-all: libmatmul.so libstats.so
+TARGET = libmatmul.so
+SRC = matmul.c
 
-libmatmul.so: matmul.c matmul.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ matmul.c -lm
+all: $(TARGET)
 
-libstats.so: stats.c stats.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ stats.c
+$(TARGET): $(SRC) matmul.h
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET) $(SRC) -lm
 
 clean:
-	rm -f libmatmul.so libstats.so
+	rm -f $(TARGET)
 
 .PHONY: all clean

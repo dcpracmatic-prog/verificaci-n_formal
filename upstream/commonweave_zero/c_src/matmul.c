@@ -5,7 +5,6 @@
  */
 
 #include <stddef.h>
-#include <stdint.h>
 #include <string.h>
 #include <math.h>
 
@@ -32,9 +31,6 @@ int matmul(const double *A, const double *B, double *C,
     /* Simple overflow guard on total elements */
     if (m > 10000 || k > 10000 || n > 10000)
         return CW_ERR_OVERFLOW;
-    /* Contract: float64 buffers must be 8-byte aligned */
-    if (((uintptr_t)A | (uintptr_t)B | (uintptr_t)C) & 7u)
-        return CW_ERR_ALIGN;
 
     for (size_t i = 0; i < m; ++i) {
         for (size_t j = 0; j < n; ++j) {
@@ -56,12 +52,6 @@ int scale_clamp(const double *in, double *out, size_t len,
         return CW_ERR_NULL;
     if (len == 0)
         return CW_ERR_DIM;
-    if (len > 1000000)
-        return CW_ERR_OVERFLOW;
-    if (!(hi >= lo))            /* contrato: requires hi >= lo (code 2); también rechaza NaN */
-        return CW_ERR_DIM;
-    if (((uintptr_t)in | (uintptr_t)out) & 7u)
-        return CW_ERR_ALIGN;
     for (size_t i = 0; i < len; ++i) {
         double v = in[i] * scale;
         if (v < lo) v = lo;

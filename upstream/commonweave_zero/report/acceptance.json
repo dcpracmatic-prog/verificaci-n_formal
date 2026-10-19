@@ -1,0 +1,86 @@
+{
+  "schema": "commonweave.certificate/1.0",
+  "experiment": "COMMONWEAVE Zero",
+  "date": "2026-10-19",
+  "timestamp_utc": "2026-10-19T18:48:16Z",
+  "hypothesis": "Un contrato declarativo puede generar un adaptador C→Python verificado con menor esfuerzo humano que un binding convencional, preservando equivalencia semántica y rendimiento competitivo en el camino caliente.",
+  "differential": {
+    "verdict": "PASS",
+    "pass_rate": 1.0,
+    "trials": 60,
+    "edge_passed": "5/5",
+    "seed": 20261018
+  },
+  "benchmark": {
+    "cold_start_seconds": {
+      "pure_python": 4.449000002182402e-06,
+      "manual_ctypes": 4.281399999683799e-05,
+      "generated": 9.070000004385292e-06,
+      "ipc": 0.0033591039999976147
+    },
+    "effort_proxy": {
+      "pure_python": {
+        "loc_glue": 0,
+        "note": "rewrite of algorithm"
+      },
+      "manual_ctypes": {
+        "loc_glue": 25,
+        "note": "hand-written argtypes + conversion"
+      },
+      "generated": {
+        "loc_glue": 0,
+        "note": "contract only; adapter emitted"
+      },
+      "ipc": {
+        "loc_glue": 40,
+        "note": "process + serialisation boilerplate"
+      }
+    },
+    "sizes_tested": [
+      "4",
+      "8",
+      "16",
+      "32"
+    ]
+  },
+  "proofs": [
+    {
+      "id": "DIFF-SEMANTIC",
+      "class": "differential",
+      "statement": "Para las 60 entradas aleatorias (m,k,n ∈ [1,16]) y los casos límite de dimensión inválida, el adaptador generado produce el mismo resultado float64 (tol 1e-9) que el modelo de referencia en Python puro, y rechaza dimensiones inválidas con el código de error del contrato.",
+      "domain": "m,k,n ∈ [1,16] aleatorio + ejes de tamaño 0",
+      "status": "PROVEN",
+      "trusted": [
+        "python3",
+        "ctypes",
+        "libmatmul.so",
+        "generated adapter"
+      ]
+    },
+    {
+      "id": "BENCH-COMPETITIVE",
+      "class": "empirical",
+      "statement": "En el camino caliente, la latencia mediana del adaptador generado es competitiva con el binding ctypes manual y sustancialmente inferior a Python puro e IPC para tamaños 8×8–32×32.",
+      "domain": "tamaños 4,8,16,32; 35 repeticiones",
+      "status": "OBSERVED",
+      "trusted": [
+        "time.perf_counter",
+        "libmatmul.so"
+      ]
+    }
+  ],
+  "what_was_verified": [
+    "Equivalencia semántica en matrices densas float64 (dominio acotado)",
+    "Rechazo de dimensiones inválidas (código de error del contrato)",
+    "Superficie de error codes coherente con el YAML"
+  ],
+  "what_remains_unproven": [
+    "Prueba formal de equivalencia para tamaños arbitrarios",
+    "Camino zero-copy sin arrays intermedios de ctypes",
+    "Generalización más allá del contrato matmul",
+    "Propiedades de seguridad de un componente nativo no confiable",
+    "Ausencia de solapamiento de buffers (precondición no declarada)"
+  ],
+  "decision": "PROCEED to next iteration",
+  "limits": "PROVEN significa: no se encontró contraejemplo en el dominio indicado, bajo la base de confianza listada. No significa 'software libre de errores bajo cualquier escenario'."
+}

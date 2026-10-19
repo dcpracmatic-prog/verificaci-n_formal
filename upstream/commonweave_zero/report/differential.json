@@ -1,0 +1,120 @@
+{
+  "timestamp": "2026-10-19T18:48:14Z",
+  "seed": 20261018,
+  "trials": 60,
+  "passed": 60,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "edge_cases": [
+    {
+      "case": "invalid_dim_(0, 1, 1)",
+      "passed": true
+    },
+    {
+      "case": "invalid_dim_(1, 0, 1)",
+      "passed": true
+    },
+    {
+      "case": "invalid_dim_(1, 1, 0)",
+      "passed": true
+    },
+    {
+      "case": "1x1",
+      "m": 1,
+      "k": 1,
+      "n": 1,
+      "seed": 42,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 1.216100000078768e-05,
+      "t_ref": 1.0699999961616413e-06
+    },
+    {
+      "case": "2x3x4",
+      "m": 2,
+      "k": 3,
+      "n": 4,
+      "seed": 99,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 9.237000000439366e-06,
+      "t_ref": 4.481999994254693e-06
+    }
+  ],
+  "edge_passed": 5,
+  "edge_total": 5,
+  "results_sample": [
+    {
+      "m": 7,
+      "k": 11,
+      "n": 3,
+      "seed": 20261018,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 0.0002847920000021986,
+      "t_ref": 1.81819999909294e-05
+    },
+    {
+      "m": 15,
+      "k": 4,
+      "n": 8,
+      "seed": 20261019,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 5.5565000010915355e-05,
+      "t_ref": 3.4001999992483434e-05
+    },
+    {
+      "m": 2,
+      "k": 9,
+      "n": 9,
+      "seed": 20261020,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 3.2932999999957246e-05,
+      "t_ref": 1.0716999994997423e-05
+    },
+    {
+      "m": 6,
+      "k": 2,
+      "n": 8,
+      "seed": 20261021,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 3.437200000178109e-05,
+      "t_ref": 9.246999994161342e-06
+    },
+    {
+      "m": 5,
+      "k": 4,
+      "n": 3,
+      "seed": 20261022,
+      "gen_ok": true,
+      "ref_ok": true,
+      "match": true,
+      "gen_err": null,
+      "ref_err": null,
+      "t_gen": 2.2166999997352832e-05,
+      "t_ref": 5.084999997961859e-06
+    }
+  ],
+  "verdict": "PASS"
+}

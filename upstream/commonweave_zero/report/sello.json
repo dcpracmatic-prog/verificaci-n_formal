@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "proyecto": "COMMONWEAVE-Zero",
+  "firmante": "COMMONWEAVE-Zero",
+  "public_key_b64": "wK2np4gD8zoEdDGZDDO24kkwAIPVRZgMzBZ9nS8pdLE=",
+  "timestamp_utc": "2026-10-19T18:48:16Z",
+  "artifacts": [
+    {
+      "path": "report/acceptance.json",
+      "sha3_256": "439cee68be69fca04b7b56f3202d7fa47141824c917d82646cf10f76a6ae74ba"
+    },
+    {
+      "path": "report/differential.json",
+      "sha3_256": "26fe038492d81ebe4eb7fcda47fbda1873e893a13c8c60a457c8926169c55bd0"
+    },
+    {
+      "path": "report/benchmark.json",
+      "sha3_256": "fd2c108de5b0d5a5187a12c72f9e894e36113aba5079e68caaa8aacea7784959"
+    },
+    {
+      "path": "contracts/matmul.yaml",
+      "sha3_256": "34fb1ae63d8a63c666a82e50a32017f3ed3d1bd06c8c3d024e50329d123cf6af"
+    },
+    {
+      "path": "generated/matmul_adapter.py",
+      "sha3_256": "9113c83a5256356f76e8c751b65f7a17ac2bff487e09398a35710ce885811ea5"
+    },
+    {
+      "path": "c_src/libmatmul.so",
+      "sha3_256": "a63d97cc7616da5f515d9fec2917022b22d707a94a0c0df1fe8b3e3016ea2dce"
+    }
+  ],
+  "payload_hash": "0b992d5b06f9ed5ee243d0a6a701b7e62e2429e333234dc419dcf2593d8caaa1",
+  "signature_b64": "JOtpUKNzC1zbqeDOY7qRmT41Osm/eGWmoOIjNezavNr1erug5273c7F0Dd3/6m97olmkde/tZOCdzzjqYDSGCw==",
+  "statement": "COMMONWEAVE Zero: differential verification PASS + four-way benchmark evidence. Seal covers acceptance certificate, differential report, benchmark, contract, generated adapter and native library."
+}
