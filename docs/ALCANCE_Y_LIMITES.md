@@ -39,5 +39,12 @@ Cada `Proof` en `report/certificate.json` lleva su enunciado exacto (incluido el
 ## 5. Cómo leer un `PROVEN` aquí
 `PROVEN` = "no existe contraejemplo en el dominio/alcance indicado en `statement`, bajo la base de confianza indicada en `trusted`". Nunca "el software es infalible".
 
-## 6. Licencia
+## 6. Brechas abiertas conocidas
+- **Solapamiento de buffers:** el contrato de `matmul` no declara si `C` puede solaparse con `A` o `B`; un solapamiento corrompería datos aún necesarios. Hay que añadir la precondición (o `restrict`) y un arnés que la compruebe.
+- **Tamaño y validez de buffers y punto flotante:** falta especificar con precisión el tamaño/validez de cada buffer y el comportamiento numérico (NaN, infinitos, cota de error).
+- **Prueba completa vs. acotada vs. no resuelta:** los scripts ya distinguen `PROBADO`/`REFUTADO`/`NO RESUELTO`; falta llevar esa misma distinción a `certificate.json`.
+- **Trazabilidad contrato → obligación → código:** las obligaciones se generan del YAML, pero falta mostrar que cada propiedad del contrato tiene su obligación y que el certificado registra versiones de herramientas y archivos para cada resultado.
+- **Generalización:** los ejemplos son pocos y pequeños; faltan más componentes, errores sembrados de otros tipos y mediciones de tiempo.
+
+## 7. Licencia
 El repositorio se distribuye bajo la [Elastic License 2.0](../LICENSE). Es «source-available», no una licencia de código abierto aprobada por la OSI.

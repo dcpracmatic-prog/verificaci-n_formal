@@ -42,6 +42,7 @@ report/        certificate.json, RESUMEN.md (generados)
 ## Estado de CBMC y Z3
 - **Z3:** las 5 obligaciones SMT-LIB dan `unsat` (propiedad probada). Se ejecutan con `sh obligations/run_z3.sh` y en el workflow `formal-solvers.yml`.
 - **CBMC:** `array_stats_valid/invalid`, `histogram_invalid` y `scale_clamp_invalid` pasan. `matmul_*` y `histogram_valid` son muy pesados y no terminaron en las pruebas locales (dependen del tiempo límite). `scale_clamp_valid` falla a propósito de las comprobaciones de punto flotante: CBMC encuentra NaN y desbordamiento en `in[i] * scale` porque el contrato no acota los flotantes. No es un error nuevo del código: es la limitación de punto flotante ya declarada abajo.
+- **Estados y código de salida:** `run_z3.sh` y `run_cbmc.sh` informan cada obligación como `PROBADO`, `REFUTADO` (contraejemplo) o `NO RESUELTO` (timeout/error), y salen con 0 (todo probado), 1 (hay refutadas) o 2 (sin refutadas pero con no resueltas). Una obligación no resuelta nunca cuenta como aprobada. `CBMC_TIMEOUT` fija los segundos por arnés (600 por defecto; 240 en CI) y `CBMC_ONLY` filtra por nombre.
 - `run_all.py` no ejecuta Z3 ni CBMC; solo comprueba con gcc que los arneses compilan y pasan humo, y lo indica en `report/RESUMEN.md`.
 
 ## Hallazgo corregido: `scale_clamp` con `lo > hi`

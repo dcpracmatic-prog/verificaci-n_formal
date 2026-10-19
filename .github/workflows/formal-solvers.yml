@@ -26,7 +26,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes z3
       - name: Ejecutar obligaciones SMT
-        run: sh obligations/run_z3.sh
+        run: |
+          set +e
+          sh obligations/run_z3.sh > z3.log 2>&1
+          rc=$?
+          cat z3.log
+          { echo '### Resultado Z3'; echo '```'; cat z3.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          exit $rc
 
   cbmc:
     name: Arneses C con CBMC
@@ -41,6 +47,12 @@ jobs:
           sudo apt-get install --yes cbmc gcc
       - name: Ejecutar verificación acotada
         shell: bash
+        env:
+          CBMC_TIMEOUT: "240"
         run: |
-          set -o pipefail
-          bash obligations/run_cbmc.sh
+          set +e
+          bash obligations/run_cbmc.sh > cbmc.log 2>&1
+          rc=$?
+          cat cbmc.log
+          { echo '### Resultado CBMC'; echo '```'; cat cbmc.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          exit $rc
