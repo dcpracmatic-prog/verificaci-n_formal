@@ -78,3 +78,14 @@ El módulo `seal/sello.py` implementa la intención del **Sello de Integridad** 
 - La clave privada nunca se escribe en el sello
 
 En esta versión se usa una seed de demo para reproducibilidad del prototipo. En uso real se debe generar o cargar una clave privada fuera del repositorio.
+
+## Nota sobre el sello CSG
+
+El sello (`report/sello.json`) cubre digests SHA3 de artefactos concretos.
+Si regeneras el adaptador (`generated/matmul_adapter.py`) o recompilas el `.so`,
+los digests cambian y el sello anterior deja de verificar.
+
+- `python run_zero.py` siempre **vuelve a sellar** al final del pipeline.
+- El notebook de validación **re-sella** en la sección 4 tras regenerar, para que la verificación pase en el entorno de ejecución.
+
+Esto es comportamiento correcto del sello (detecta cambios), no un fallo de lógica.
